@@ -1,0 +1,8 @@
+<app-product-list
+    [title]="'Products'"
+    [products] = "productService.products$()"
+/>
+
+<app-pagination
+    [service]="productService"
+/>

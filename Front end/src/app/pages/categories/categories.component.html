@@ -1,0 +1,7 @@
+<app-categories-list
+    [title]="'Categories'"
+    [categories] = "categoriesService.categories$()"
+/>
+<app-pagination
+    [service]="categoriesService"
+/>
