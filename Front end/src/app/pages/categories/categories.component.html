@@ -1,7 +1,34 @@
-<app-categories-list
-    [title]="'Categories'"
-    [categories] = "categoriesService.categories$()"
-/>
-<app-pagination
-    [service]="categoriesService"
-/>
+@defer {
+    <div class="row pb-2">
+        <div class="col-12">
+            <div class="d-flex justify-content-end align-item-center">
+                <button (click)="modalService.displayModal('md', addCategoriesModal)" type="button" class="btn btn-primary">
+                    Add Category
+                </button>
+            </div>
+        </div>
+        <div class="col-12">
+            <app-categories-list
+            [title]="'Categories'"
+            [categories] = "categoriesService.categories$()"
+        />
+        </div>
+        <app-pagination
+            [service]="categoriesService"
+        />
+    </div>
+} @loading (minimum 1.5s) {
+    <app-loader/>
+  }
+
+<ng-template #addCategoriesModal>
+    <app-modal
+        [hideFooter]="true"
+    >
+        <div>
+            <app-categories-form
+                (callSaveMethod)="saveCategory($event)"
+            />
+        </div>
+    </app-modal>
+</ng-template>

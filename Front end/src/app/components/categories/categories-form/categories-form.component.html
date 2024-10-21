@@ -1,1 +1,22 @@
-<p>categories-form works!</p>
+<form [formGroup]="categoriesForm" class="row">
+    <div>
+        <h2 class="mb-0">Add category</h2>
+    </div>
+    <div class="mb-2">
+        <label for="name" class="mb-1">Name*</label>
+        <input id="name" formControlName="name" type="text" class="form-control">
+        @if (categoriesForm.controls['name'].invalid && (categoriesForm.controls['name'].dirty || categoriesForm.controls['name'].touched)) {
+            <p class="text-danger my-1">Name is requiered</p>
+        }
+    </div>
+    <div class="mb-2">
+        <label for="description" class="mb-1">Description*</label>
+        <input id="description" formControlName="description" type="text" class="form-control">
+        @if (categoriesForm.controls['description'].invalid && (categoriesForm.controls['description'].dirty || categoriesForm.controls['description'].touched)) {
+            <p class="text-danger">Description is requiered</p>
+        }
+    </div>
+    <div class="d-flex justify-content-end">
+        <button (click)="callSave()" [disabled]="categoriesForm.invalid" class="btn btn-primary" type="button">Save</button>
+    </div>
+</form>

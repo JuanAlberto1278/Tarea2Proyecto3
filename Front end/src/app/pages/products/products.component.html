@@ -1,8 +1,32 @@
-<app-product-list
-    [title]="'Products'"
-    [products] = "productService.products$()"
-/>
+@defer {
+    <div class="row pb-2">
+        <div class="col-12">
+            <div class="d-flex justify-content-end align-item-center">
+                <button (click)="modalService.displayModal('md', addProductsModal)"  type="button" class="btn btn-primary">
+                    Add Product
+                </button>
+            </div>
+        </div>
+        <div class="col-12">
+            <app-product-list
+            [title]="'Products'"
+            [products] = "productService.products$()"
+        />
+        </div>
+        <app-pagination
+            [service]="productService"
+        />
+    </div>
+} @loading (minimum 1.5s) {
+    <app-loader/>
+  }
 
-<app-pagination
-    [service]="productService"
-/>
+<ng-template #addProductsModal>
+    <app-modal
+    [hideFooter]="true"
+    >
+        <div>
+            <app-product-form/>
+        </div>
+    </app-modal>
+</ng-template>

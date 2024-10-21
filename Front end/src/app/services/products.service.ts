@@ -1,6 +1,8 @@
-import { Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { BaseService } from './base-service';
 import { IProduct, ISearch } from '../interfaces';
+import { AuthService } from './auth.service';
+import { AlertService } from './alert.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +19,9 @@ export class ProductsService extends BaseService<IProduct>{
   }
 
   public totalItems: any = [];
+  
+  private authService: AuthService = inject(AuthService);
+  private alertService: AlertService = inject(AlertService);
 
   getAll() {
     this.findAllWithParams(this.search).subscribe({
@@ -30,5 +35,44 @@ export class ProductsService extends BaseService<IProduct>{
         console.error('error', err)
       }
     })
+  }
+
+  save(product: IProduct) {
+    this.add(product).subscribe({
+      next: (response: any) => {
+        this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+        this.getAll();
+      },
+      error: (err: any) => {
+        this.alertService.displayAlert('error', 'An error occurred adding the product','center', 'top', ['error-snackbar']);
+        console.error('error', err);
+      }
+    });
+  }
+
+  update(product: IProduct) {
+    this.editCustomSource(`${product.id}`, product).subscribe({
+      next: (response: any) => {
+        this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+        this.getAll();
+      },
+      error: (err: any) => {
+        this.alertService.displayAlert('error', 'An error occurred updating the product','center', 'top', ['error-snackbar']);
+        console.error('error', err);
+      }
+    });
+  }
+
+  delete(product: IProduct) {
+    this.delCustomSource(`${product.id}`).subscribe({
+      next: (response: any) => {
+        this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+        this.getAll();
+      },
+      error: (err: any) => {
+        this.alertService.displayAlert('error', 'An error occurred deleting the product','center', 'top', ['error-snackbar']);
+        console.error('error', err);
+      }
+    });
   }
 }

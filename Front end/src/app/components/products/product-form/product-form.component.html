@@ -1,1 +1,36 @@
-<p>product-form works!</p>
+<form [formGroup]="productsForm" class="row">
+    <div>
+        <h2 class="mb-0">Add product</h2>
+    </div>
+    <div class="mb-2">
+        <label for="name" class="mb-1">Name*</label>
+        <input id="name" formControlName="name" type="text" class="form-control">
+        @if (productsForm.controls['name'].invalid && (productsForm.controls['name'].dirty || productsForm.controls['name'].touched)) {
+            <p class="text-danger my-1">Name is requiered</p>
+        }
+    </div>
+    <div class="mb-2">
+        <label for="description" class="mb-1">Description*</label>
+        <input id="description" formControlName="description" type="text" class="form-control">
+        @if (productsForm.controls['description'].invalid && (productsForm.controls['description'].dirty || productsForm.controls['description'].touched)) {
+            <p class="text-danger">Description is requiered</p>
+        }
+    </div>
+    <div class="mb-2">
+        <label for="price" class="mb-1">Price*</label>
+        <input min="1" id="price" formControlName="price" type="number" class="form-control">
+        @if (productsForm.controls['price'].invalid && (productsForm.controls['price'].dirty || productsForm.controls['price'].touched)) {
+            <p class="text-danger">Minimun price requiered is 1</p>
+        }
+    </div>
+    <div class="mb-2">
+        <label for="stock" class="mb-1">Stock*</label>
+        <input min="1" id="stock" formControlName="stock" type="number" class="form-control">
+        @if (productsForm.controls['stock'].invalid && (productsForm.controls['stock'].dirty || productsForm.controls['stock'].touched)) {
+            <p class="text-danger">Minimun stock requiered is 1</p>
+        }
+    </div>
+    <div class="d-flex justify-content-end">
+        <button onclick="callSave()" [disabled]="productsForm.invalid" class="btn btn-primary" type="button">Save</button>
+    </div>
+</form>
