@@ -72,7 +72,8 @@ public class CategoryRestController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public void deleteCategory(@PathVariable Long id) {
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
         categoryRepository.deleteById(id);
+        return ResponseEntity.ok().body("Category deleted successfully");
     }
 }

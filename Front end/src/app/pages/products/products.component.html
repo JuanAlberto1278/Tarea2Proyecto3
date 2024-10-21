@@ -10,6 +10,8 @@
         <div class="col-12">
             <app-product-list
             [title]="'Products'"
+            (callModalAction)="callEdition($event)"
+            (callDeleteAction)="productService.delete($event)"
             [products] = "productService.products$()"
         />
         </div>
@@ -23,10 +25,14 @@
 
 <ng-template #addProductsModal>
     <app-modal
-    [hideFooter]="true"
+        [hideFooter]="true"
     >
         <div>
-            <app-product-form/>
+            <app-product-form
+                [productsForm]="productForm"
+                (callSaveMethod)="saveProduct($event)"
+                (callUpdateMethod)="updateProduct($event)"
+            />
         </div>
     </app-modal>
 </ng-template>

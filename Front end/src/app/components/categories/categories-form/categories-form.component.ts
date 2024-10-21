@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ICategory } from '../../../interfaces';
 
@@ -11,17 +11,25 @@ import { ICategory } from '../../../interfaces';
 })
 export class CategoriesFormComponent {
   public fb: FormBuilder = inject(FormBuilder);
-  public categoriesForm: FormGroup = this.fb.group({
-    name: ['', Validators.required],
-    description: ['', Validators.required]
-  })
+  @Input() categoryId!: number;
+  @Input() categoriesForm!: FormGroup;
   @Output () callSaveMethod: EventEmitter<ICategory> = new EventEmitter<ICategory>();
+  @Output () callUpdateMethod: EventEmitter<ICategory> = new EventEmitter<ICategory>();
 
   callSave() {
-    let category = {
+    let category: ICategory = {
       name: this.categoriesForm.controls['name'].value,
       description: this.categoriesForm.controls['description'].value
     }
-    this.callSaveMethod.emit(category)
+    if(this.categoriesForm.controls['id'].value) {
+      category.id = this.categoriesForm.controls['id'].value
+    } 
+    if(category.id){
+      this.callUpdateMethod.emit(category)
+    } else {
+      this.callSaveMethod.emit(category)
+    }
+
+    
   }
 }

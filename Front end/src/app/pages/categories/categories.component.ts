@@ -7,6 +7,7 @@ import { LoaderComponent } from '../../components/loader/loader.component';
 import { ModalService } from '../../services/modal.service';
 import { CategoriesFormComponent } from '../../components/categories/categories-form/categories-form.component';
 import { ICategory } from '../../interfaces';
+import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-categories',
@@ -16,17 +17,35 @@ import { ICategory } from '../../interfaces';
   styleUrl: './categories.component.scss'
 })
 export class CategoriesComponent {
-
   public categoriesService: CategoriesService = inject(CategoriesService);
   public modalService: ModalService = inject(ModalService);
   @ViewChild('addCategoriesModal') addCategoriesModal: any;
+  public fb: FormBuilder = inject(FormBuilder);
+  categoryForm = this.fb.group({
+    id: [''],
+    name: ['', Validators.required],
+    description: ['', Validators.required],
+  })
   
   constructor( ) {
     this.categoriesService.getAll();
   }
 
   saveCategory(category: ICategory) {
-    this.categoriesService.save(category)
+    this.categoriesService.save(category);
+    this.modalService.closeAll();
+  }
+
+  callEdition(category: ICategory) {
+    this.categoryForm.controls['id'].setValue(category.id ? JSON.stringify(category.id) : '');
+    this.categoryForm.controls['name'].setValue(category.name ? category.name : '');
+    this.categoryForm.controls['description'].setValue(category.description ? category.description : '');
+    this.modalService.displayModal('md', this.addCategoriesModal);
+  }
+  
+  updateCategory(category: ICategory){
+    this.categoriesService.update(category);
+    this.modalService.closeAll();
   }
 
 }

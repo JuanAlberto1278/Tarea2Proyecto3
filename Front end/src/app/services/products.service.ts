@@ -19,14 +19,12 @@ export class ProductsService extends BaseService<IProduct>{
   }
 
   public totalItems: any = [];
-  
   private authService: AuthService = inject(AuthService);
   private alertService: AlertService = inject(AlertService);
 
   getAll() {
     this.findAllWithParams(this.search).subscribe({
       next: (response: any) =>{
-        
         this.search = {...this.search, ...response.meta};
         this.totalItems = Array.from({length: this.search.totalPages ? this.search.totalPages: 0}, (_, i) => i+1);
         this.productsListSignal.set(response.data);
@@ -44,7 +42,7 @@ export class ProductsService extends BaseService<IProduct>{
         this.getAll();
       },
       error: (err: any) => {
-        this.alertService.displayAlert('error', 'An error occurred adding the product','center', 'top', ['error-snackbar']);
+        this.alertService.displayAlert('error', 'An error occurred adding the user','center', 'top', ['error-snackbar']);
         console.error('error', err);
       }
     });
@@ -70,7 +68,7 @@ export class ProductsService extends BaseService<IProduct>{
         this.getAll();
       },
       error: (err: any) => {
-        this.alertService.displayAlert('error', 'An error occurred deleting the product','center', 'top', ['error-snackbar']);
+        this.alertService.displayAlert('error', 'An error occurred deleting the user','center', 'top', ['error-snackbar']);
         console.error('error', err);
       }
     });

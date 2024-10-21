@@ -87,5 +87,5 @@ export interface IProduct {
   description?: string,
   price?: number,
   stock?: number,
-  category?: number
+  categoryId?: number
 }

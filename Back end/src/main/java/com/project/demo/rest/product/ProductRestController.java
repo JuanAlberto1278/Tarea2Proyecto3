@@ -92,7 +92,8 @@ public class ProductRestController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public void deleteProduct(@PathVariable Long id) {
+    public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
         productRepository.deleteById(id);
+        return ResponseEntity.ok().body("Product deleted successfully");
     }
 }

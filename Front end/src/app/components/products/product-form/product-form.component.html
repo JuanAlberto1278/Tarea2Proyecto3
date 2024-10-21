@@ -30,7 +30,14 @@
             <p class="text-danger">Minimun stock requiered is 1</p>
         }
     </div>
+    <div class="mb-2">
+        <label for="categoryId" class="mb-1">Category Id*</label>
+        <input min="1" id="categoryId" formControlName="categoryId" type="number" class="form-control">
+        @if (productsForm.controls['categoryId'].invalid && (productsForm.controls['categoryId'].dirty || productsForm.controls['categoryId'].touched)) {
+            <p class="text-danger">Category Id is requiered</p>
+        }
+    </div>
     <div class="d-flex justify-content-end">
-        <button onclick="callSave()" [disabled]="productsForm.invalid" class="btn btn-primary" type="button">Save</button>
+        <button (click)="callSave()" [disabled]="productsForm.invalid" class="btn btn-primary" type="button">Save</button>
     </div>
 </form>

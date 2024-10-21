@@ -10,6 +10,8 @@
         <div class="col-12">
             <app-categories-list
             [title]="'Categories'"
+            (callModalAction)="callEdition($event)"
+            (callDeleteAction)="categoriesService.delete($event)"
             [categories] = "categoriesService.categories$()"
         />
         </div>
@@ -27,7 +29,9 @@
     >
         <div>
             <app-categories-form
+                [categoriesForm]="categoryForm"
                 (callSaveMethod)="saveCategory($event)"
+                (callUpdateMethod)="updateCategory($event)"
             />
         </div>
     </app-modal>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { IProduct } from '../../../interfaces';
 
@@ -11,21 +11,28 @@ import { IProduct } from '../../../interfaces';
 })
 export class ProductFormComponent {
   public fb: FormBuilder = inject(FormBuilder);
-  public productsForm: FormGroup = this.fb.group({
-    name: ['', Validators.required],
-    description: ['', Validators.required],
-    price: ['', Validators.required, Validators.min(1)],
-    stock: ['', Validators.required, Validators.min(1)]
-  })
+  @Input() productId!: number;
+  @Input() productsForm!: FormGroup;
   @Output () callSaveMethod: EventEmitter<IProduct> = new EventEmitter<IProduct>();
+  @Output () callUpdateMethod: EventEmitter<IProduct> = new EventEmitter<IProduct>();
 
   callSave() {
-    let product = {
+    let product: IProduct = {
       name: this.productsForm.controls['name'].value,
       description: this.productsForm.controls['description'].value,
       price: this.productsForm.controls['price'].value,
-      stock: this.productsForm.controls['stock'].value
+      stock: this.productsForm.controls['stock'].value,
+      categoryId: this.productsForm.controls['categoryId'].value
     }
-    this.callSaveMethod.emit(product)
+    if(this.productsForm.controls['id'].value){
+      product.id = this.productsForm.controls['id'].value
+    }
+    if(product.id){
+      this.callUpdateMethod.emit(product)
+    } else{
+      this.callSaveMethod.emit(product)
+    }
+
+    
   }
 }

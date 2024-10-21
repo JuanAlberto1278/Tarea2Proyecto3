@@ -1,4 +1,4 @@
-import {Component, Input, } from '@angular/core';
+import {Component, EventEmitter, Input, Output, } from '@angular/core';
 import { IProduct } from '../../../interfaces';
 
 @Component({
@@ -11,4 +11,6 @@ import { IProduct } from '../../../interfaces';
 export class ProductListComponent {
   @Input() title: string = '';
   @Input() products: IProduct[] = [];
+  @Output() callModalAction: EventEmitter<IProduct> = new EventEmitter<IProduct>();
+  @Output() callDeleteAction: EventEmitter<IProduct> = new EventEmitter<IProduct>();
 }
