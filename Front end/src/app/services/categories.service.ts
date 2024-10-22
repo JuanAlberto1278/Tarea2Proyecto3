@@ -65,6 +65,7 @@ export class CategoriesService extends BaseService<ICategory>{
     this.delCustomSource(`${category.id}`).subscribe({
       next: (response: any) => {
         this.alertService.displayAlert('success', response.message, 'center', 'top', ['success-snackbar']);
+        this.getAll();
       },
       error: (err: any) => {
         this.alertService.displayAlert('error', 'An error occurred deleting the order','center', 'top', ['error-snackbar']);

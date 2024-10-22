@@ -17,7 +17,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
@@ -35,16 +37,27 @@ public class UserRestController {
             @RequestParam(defaultValue = "10") int size,
             HttpServletRequest request) {
 
-        Pageable pageable = PageRequest.of(page-1, size);
-        Page<User> ordersPage = userRepository.findAll(pageable);
+        // Obtén el usuario autenticado
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User authenticatedUser = (User) authentication.getPrincipal();
+
+        Pageable pageable = PageRequest.of(page - 1, size);
+        Page<User> usersPage = userRepository.findAll(pageable);
+
+        // Filtra la lista de usuarios para excluir al usuario autenticado
+        List<User> filteredUsers = usersPage.getContent()
+                .stream()
+                .filter(user -> !user.getId().equals(authenticatedUser.getId()))
+                .collect(Collectors.toList());
+
         Meta meta = new Meta(request.getMethod(), request.getRequestURL().toString());
-        meta.setTotalPages(ordersPage.getTotalPages());
-        meta.setTotalElements(ordersPage.getTotalElements());
-        meta.setPageNumber(ordersPage.getNumber() + 1);
-        meta.setPageSize(ordersPage.getSize());
+        meta.setTotalPages(usersPage.getTotalPages());
+        meta.setTotalElements(usersPage.getTotalElements() - 1); // Ajusta el total de elementos
+        meta.setPageNumber(usersPage.getNumber() + 1);
+        meta.setPageSize(usersPage.getSize());
 
         return new GlobalResponseHandler().handleResponse("Users retrieved successfully",
-                ordersPage.getContent(), HttpStatus.OK, meta);
+                filteredUsers, HttpStatus.OK, meta);
     }
 
     @PostMapping

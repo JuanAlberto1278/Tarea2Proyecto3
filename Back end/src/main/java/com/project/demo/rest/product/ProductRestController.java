@@ -16,7 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/products")
@@ -92,8 +94,16 @@ public class ProductRestController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> deleteProduct(@PathVariable Long id) {
+        // Borrar el producto por id
         productRepository.deleteById(id);
-        return ResponseEntity.ok().body("Product deleted successfully");
+
+        // Crear una respuesta en formato JSON
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Product deleted successfully");
+
+        // Devolver la respuesta con el mensaje en formato JSON
+        return ResponseEntity.ok(response);
     }
+
 }

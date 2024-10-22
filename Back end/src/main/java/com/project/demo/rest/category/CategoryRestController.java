@@ -14,7 +14,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/categories")
@@ -72,8 +74,15 @@ public class CategoryRestController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> deleteCategory(@PathVariable Long id) {
+        // Borrar la categoría por id
         categoryRepository.deleteById(id);
-        return ResponseEntity.ok().body("Category deleted successfully");
+
+        // Crear una respuesta en formato JSON
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Category deleted successfully");
+
+        // Devolver la respuesta con el mensaje en formato JSON
+        return ResponseEntity.ok(response);
     }
 }
